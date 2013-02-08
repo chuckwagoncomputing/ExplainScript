@@ -1,4 +1,10 @@
 ExplainScript
 =============
 
-Shell script for making comment boxes to explain the purpose of a script
+    #*************************************#
+    #             expscpt.sh              #
+    #             07/14/2012              #
+    #      Written By David Holdeman      #
+    #                                     #
+    #  Makes comment boxes like this one  #
+    #*************************************#
