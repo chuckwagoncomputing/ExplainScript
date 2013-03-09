@@ -305,9 +305,10 @@ ADIFFWS=$(( WSTRB - TOTAL ))
 BDIFFWS=$(( ADIFFWS / 2 ))
 elif [ $1 = "a" ]
 then
-:
+ADIFFAS=$(( ASTRB - TOTAL ))
+BDIFFAS=$(( ADIFFAS / 2 ))
 else
-echo "Error: invalid print_sstrb option"
+echo "Error: invalid print_sname option"
 fi
 print_hashend
 print_hash
@@ -394,7 +395,7 @@ done
    :
    fi
 else
-echo "Error: invalid print_sstrb option"
+echo "Error: invalid print_sname option"
 fi
 fi
 }
