@@ -69,94 +69,24 @@ diags_zenity()
 
 diags_dialog()
 {
- if CHAR=`dialog --stdout --inputbox "Enter character(s) to use for the box borders" 10 50`
- then
-  :
- else
-  exit 1
- fi
- if SPACES=`dialog --stdout --inputbox "Enter number of spaces before and after words" 10 50`
- then
-  :
- else
-  exit 1
- fi
- if SNAME=`dialog --stdout --inputbox "Enter the name of the script" 10 50`
- then
-  :
- else
-  exit 1
- fi
- if CALA=`dialog --stdout --calendar "Select the day the script was written" 0 0`
- then
-  :
- else
-  exit 1
- fi
- if WNAME=`dialog --stdout --inputbox "Enter the name of the writer" 10 50`
- then
-  :
- else
-  exit 1
- fi
- if ABOUT=`dialog --stdout --inputbox "Explain the purpose of the script in a few words" 10 50`
- then
-  :
- else
-  exit 1
- fi
- if FILE=`dialog --stdout --fselect / 10 50`
- then
-  :
- else
-  exit 1
- fi
+ CHAR=`dialog --stdout --inputbox "Enter character(s) to use for the box borders" 10 50` || exit 1
+ SPACES=`dialog --stdout --inputbox "Enter number of spaces before and after words" 10 50` || exit 1
+ SNAME=`dialog --stdout --inputbox "Enter the name of the script" 10 50` || exit 1
+ CALA=`dialog --stdout --calendar "Select the day the script was written" 0 0` || exit 1
+ WNAME=`dialog --stdout --inputbox "Enter the name of the writer" 10 50` || exit 1
+ ABOUT=`dialog --stdout --inputbox "Explain the purpose of the script in a few words" 10 50` || exit 1
+ FILE=`dialog --stdout --fselect / 10 50` || exit 1
 }
 
 diags_whiptail()
 {
- if CHAR=`whiptail --inputbox "Enter character(s) to use for the box borders" 10 50 3>&1 1>&2 2>&3`
- then
-  :
- else
-  exit 1
- fi
- if SPACES=`whiptail --inputbox "Enter number of spaces before and after words" 10 50 3>&1 1>&2 2>&3`
- then
-  :
- else
-  exit 1
- fi
- if SNAME=`whiptail --inputbox "Enter the name of the script" 10 50 3>&1 1>&2 2>&3`
- then
-  :
- else
-  exit 1
- fi
- if CALA=`whiptail --inputbox "Enter the day the script was written. Format: mm/dd/yyyy" 10 50 3>&1 1>&2 2>&3`
- then
-  :
- else
-  exit 1
- fi
- if WNAME=`whiptail --inputbox "Enter the name of the writer" 10 50 3>&1 1>&2 2>&3`
- then
-  :
- else
-  exit 1
- fi
- if ABOUT=`whiptail --inputbox "Explain the purpose of the script in a few words" 10 50 3>&1 1>&2 2>&3`
- then
-  :
- else
-  exit 1
- fi
- if FILE=`whiptail --inputbox "Enter the pathname for the file in which to store the box." 10 50 3>&1 1>&2 2>&3`
- then
-  :
- else
-  exit 1
- fi
+ CHAR=`whiptail --inputbox "Enter character(s) to use for the box borders" 10 50 3>&1 1>&2 2>&3` || exit 1
+ SPACES=`whiptail --inputbox "Enter number of spaces before and after words" 10 50 3>&1 1>&2 2>&3` || exit 1
+ SNAME=`whiptail --inputbox "Enter the name of the script" 10 50 3>&1 1>&2 2>&3` || exit 1
+ CALA=`whiptail --inputbox "Enter the day the script was written. Format: mm/dd/yyyy" 10 50 3>&1 1>&2 2>&3` || exit 1
+ WNAME=`whiptail --inputbox "Enter the name of the writer" 10 50 3>&1 1>&2 2>&3` || exit 1
+ ABOUT=`whiptail --inputbox "Explain the purpose of the script in a few words" 10 50 3>&1 1>&2 2>&3` || exit 1
+ FILE=`whiptail --inputbox "Enter the pathname for the file in which to store the box." 10 50 3>&1 1>&2 2>&3` || exit 1
 }
 
 diags_read()
@@ -177,7 +107,7 @@ diags_read()
  read FILE
 }
 
-if test $XAUTHORITY
+if [ $XAUTHORITY ]
 then
  if which zenity >> /dev/null
  then
@@ -286,7 +216,7 @@ print_writ()
 
 print_sname()
 {
- if [ -n "$MAXLENGTH" ]
+ if [ $MAXLENGTH ]
  then
   for w in $SNAME
   do
@@ -413,7 +343,7 @@ print_sname()
 
 print_wname()
 {
- if [ -n "$MAXLENGTH" ]
+ if [ $MAXLENGTH ]
  then
   for w in $WNAME
   do
@@ -540,7 +470,7 @@ print_wname()
 
 print_about()
 {
- if [ -n "$MAXLENGTH" ]
+ if [ $MAXLENGTH ]
  then
   for w in $ABOUT
   do
