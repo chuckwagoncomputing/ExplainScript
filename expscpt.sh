@@ -281,7 +281,7 @@ print_writ()
 {
 echo -n "Written By $WNAME" >> $FILE
 }
-print_sstrb()
+print_sname()
 {
 if [ -n "$MAXLENGTH" ]
 then
@@ -421,7 +421,7 @@ continue
 done
 print_hashend
 print_hash
-print_sstrb s
+print_sname s
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -553,7 +553,7 @@ continue
 done
 print_hashend
 print_hash
-print_sstrb w
+print_sname w
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -672,7 +672,7 @@ continue
 done
 print_hashend
 print_hash
-print_sstrb a
+print_sname a
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
