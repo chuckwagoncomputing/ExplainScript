@@ -399,6 +399,242 @@ echo "Error: invalid print_sname option"
 fi
 fi
 }
+print_wname()
+{
+if [ -n "$MAXLENGTH" ]
+then
+for w in $WNAME
+do
+THISWORD=`echo $w | wc -c`
+TOTAL=$(( TOTAL + THISWORD ))
+if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+if [ $1 = "s" ]
+then
+ADIFFSW=$(( SSTRB - TOTAL ))
+BDIFFSW=$(( ADIFFSW / 2 ))
+elif [ $1 = "w" ]
+then
+:
+elif [ $1 = "a" ]
+then
+ADIFFAW=$(( ASTRB - TOTAL ))
+BDIFFAW=$(( ADIFFAW / 2 ))
+else
+echo "Error: invalid print_wname option"
+fi
+print_hashend
+print_hash
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+TOTAL=$THISWORD
+else
+if [ $TOTAL -eq $THISWORD ]
+then
+:
+else
+LINE="$LINE "
+fi
+fi
+LINE="$LINE$w"
+done
+else
+if [ $1 = "s" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   for i in $(numlist $BDIFFSW); do
+   print_space
+   continue
+   done
+print_writ
+   for i in $(numlist $BDIFFSW); do
+   print_space
+   continue
+   done
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   if [ $REMSW -eq 1 ]; then
+   print_space
+   else
+   :
+   fi
+elif [ $1 = "w" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+print_writ
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+elif [ $1 = "a" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   for i in $(numlist $BDIFFAW); do
+   print_space
+   continue
+   done
+print_writ
+   for i in $(numlist $BDIFFAW); do
+   print_space
+   continue
+   done
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   if [ $REMAW -eq 1 ]; then
+   print_space
+   else
+   :
+   fi
+else
+echo "Error: invalid print_wname option"
+fi
+fi
+}
+print_about()
+{
+if [ -n "$MAXLENGTH" ]
+then
+for w in $ABOUT
+do
+THISWORD=`echo $w | wc -c`
+TOTAL=$(( TOTAL + THISWORD ))
+if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+if [ $1 = "s" ]
+then
+ADIFFSA=$(( SSTRB - TOTAL ))
+BDIFFSA=$(( ADIFFSA / 2 ))
+elif [ $1 = "w" ]
+then
+ADIFFWA=$(( WSTRB - TOTAL ))
+BDIFFWA=$(( ADIFFWA / 2 ))
+elif [ $1 = "a" ]
+then
+:
+else
+echo "Error: invalid print_about option"
+fi
+print_hashend
+print_hash
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+TOTAL=$THISWORD
+else
+if [ $TOTAL -eq $THISWORD ]
+then
+:
+else
+LINE="$LINE "
+fi
+fi
+LINE="$LINE$w"
+done
+else
+if [ $1 = "s" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   for i in $(numlist $BDIFFSA); do
+   print_space
+   continue
+   done
+echo -n $ABOUT >> $FILE
+   for i in $(numlist $BDIFFSA); do
+   print_space
+   continue
+   done
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   if [ $REMSA -eq 1 ]; then
+   print_space
+   else
+   :
+   fi
+elif [ $1 = "w" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   for i in $(numlist $BDIFFWA); do
+   print_space
+   continue
+   done
+echo -n $ABOUT >> $FILE
+   for i in $(numlist $BDIFFWA); do
+   print_space
+   continue
+   done
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   if [ $REMWA -eq 1 ]; then
+   print_space
+   else
+   :
+   fi
+elif [ $1 = "a" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+echo -n $ABOUT >> $FILE
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+else
+echo "Error: invalid print_about option"
+fi
+fi
+}
 if [ -z "$SNAME" ]; then
 echo "Canceled"
 exit 0
@@ -451,30 +687,7 @@ done
    fi
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   for i in $(numlist $BDIFFSW); do
-   print_space
-   continue
-   done
-print_writ
-   for i in $(numlist $BDIFFSW); do
-   print_space
-   continue
-   done
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   if [ $REMSW -eq 1 ]; then
-   print_space
-   else
-   :
-   fi
+print_wname s
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -493,30 +706,7 @@ continue
 done
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   for i in $(numlist $BDIFFSA); do
-   print_space
-   continue
-   done
-echo -n $ABOUT >> $FILE
-   for i in $(numlist $BDIFFSA); do
-   print_space
-   continue
-   done
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   if [ $REMSA -eq 1 ]; then
-   print_space
-   else
-   :
-   fi
+print_about s
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -583,17 +773,7 @@ done
    fi
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-print_writ
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
+print_wname w
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -612,30 +792,7 @@ continue
 done
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   for i in $(numlist $BDIFFWA); do
-   print_space
-   continue
-   done
-echo -n $ABOUT >> $FILE
-   for i in $(numlist $BDIFFWA); do
-   print_space
-   continue
-   done
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   if [ $REMWA -eq 1 ]; then
-   print_space
-   else
-   :
-   fi
+print_about w
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -702,30 +859,7 @@ done
    fi
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   for i in $(numlist $BDIFFAW); do
-   print_space
-   continue
-   done
-print_writ
-   for i in $(numlist $BDIFFAW); do
-   print_space
-   continue
-   done
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   if [ $REMAW -eq 1 ]; then
-   print_space
-   else
-   :
-   fi
+print_wname a
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -744,17 +878,7 @@ continue
 done
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-echo -n $ABOUT >> $FILE
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
+print_about a
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
