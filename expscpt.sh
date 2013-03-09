@@ -22,6 +22,16 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]
 then
 echo -e "Usage: expscpt.sh [OPTIONS]...\n#*************************************#\n#             expscpt.sh              #\n#             07/14/2012              #\n#      Written By David Holdeman      #\n#                                     #\n#  Makes comment boxes like this one  #\n#*************************************#\n\n  -h, --help        Display this help and exit\n  -l [NUMBER]       Limit lines at certain number of chars\n"
 exit
+elif [ "$1" = "-l" ]
+then
+if [ $2 -eq $2 ] || [ $2 != "" ] 2> /dev/null
+then
+MAXLENGTHA=$2
+MAXLENGTH=`echo $(( MAXLENGTHA-$(($((CHAR*2 ))+$(echo $CHAR | wc -c)))))`
+else
+echo "Error: Value for max is not a number"
+exit
+fi
 else
 :
 fi
@@ -213,17 +223,6 @@ then
 else
 echo "Error: Date not formatted correctly"
 fi
-if [ "$1" = "-l" ]
-then
-if [ $2 -eq $2 ] || [ $2 != "" ] 2> /dev/null
-then
-MAXLENGTHA=$2
-MAXLENGTH=`echo $(( MAXLENGTHA-$(($((CHAR*2 ))+2))))`
-else
-echo "Error: Value for max is not a number"
-exit
-fi
-fi
 SSTRA=`echo $SNAME | wc -c`
 WSTRA=`echo $WNAME | wc -c`
 ASTRA=`echo $ABOUT | wc -c`
@@ -282,9 +281,128 @@ print_writ()
 {
 echo -n "Written By $WNAME" >> $FILE
 }
+print_sstrb()
+{
+if [ -n "$MAXLENGTH" ]
+then
+for w in $SNAME
+do
+THISWORD=`echo $w | wc -c`
+TOTAL=$(( TOTAL + THISWORD ))
+if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+if [ $1 = "s" ]
+then
+:
+elif [ $1 = "w" ]
+then
+ADIFFWS=$(( WSTRB - TOTAL ))
+BDIFFWS=$(( ADIFFWS / 2 ))
+elif [ $1 = "a" ]
+then
+:
+else
+echo "Error: invalid print_sstrb option"
+fi
+print_hashend
+print_hash
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+TOTAL=$THISWORD
+else
+if [ $TOTAL -eq $THISWORD ]
+then
+:
+else
+LINE="$LINE "
+fi
+fi
+LINE="$LINE$w"
+done
+else
+if [ $1 = "s" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+echo -n $SNAME >> $FILE
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+elif [ $1 = "w" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   for i in $(numlist $BDIFFWS); do
+   print_space
+   continue
+   done
+echo -n $SNAME >> $FILE
+   for i in $(numlist $BDIFFWS); do
+   print_space
+   continue
+   done
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   if [ $REMWS -eq 1 ]; then
+   print_space
+   else
+   :
+   fi
+elif [ $1 = "a" ]
+then
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   for i in $(numlist $BDIFFAS); do
+   print_space
+   continue
+   done
+echo -n $SNAME >> $FILE
+   for i in $(numlist $BDIFFAS); do
+   print_space
+   continue
+   done
+for i in $(numlist $SPACES)
+do
+print_space
+continue
+done
+   if [ $REMAS -eq 1 ]; then
+   print_space
+   else
+   :
+   fi
+else
+echo "Error: invalid print_sstrb option"
+fi
+fi
+}
 if [ -z "$SNAME" ]; then
 echo "Canceled"
 exit 0
+
+# If Scriptname is the longest
 elif [ $SSTRB -ge $WSTRB -a $SSTRB -ge $ASTRB ]; then
 print_hash
 for i in $(numlist $SPACES)
@@ -303,17 +421,7 @@ continue
 done
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-echo -n $SNAME >> $FILE
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
+print_sstrb s
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -425,6 +533,8 @@ print_doingy
 continue
 done
 print_hashend
+
+# If writer name plus "written by" is the longest
 elif [ $WSTRB -gt $SSTRB -a $WSTRB -gt $ASTRB ]; then
 print_hash
 for i in $(numlist $SPACES)
@@ -443,30 +553,7 @@ continue
 done
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   for i in $(numlist $BDIFFWS); do
-   print_space
-   continue
-   done
-echo -n $SNAME >> $FILE
-   for i in $(numlist $BDIFFWS); do
-   print_space
-   continue
-   done
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   if [ $REMWS -eq 1 ]; then
-   print_space
-   else
-   :
-   fi
+print_sstrb w
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
@@ -565,6 +652,8 @@ print_doingy
 continue
 done
 print_hashend
+
+# If About is the longest
 elif [ $ASTRB -gt $SSTRB ]; then
 print_hash
 for i in $(numlist $SPACES)
@@ -583,30 +672,7 @@ continue
 done
 print_hashend
 print_hash
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   for i in $(numlist $BDIFFAS); do
-   print_space
-   continue
-   done
-echo -n $SNAME >> $FILE
-   for i in $(numlist $BDIFFAS); do
-   print_space
-   continue
-   done
-for i in $(numlist $SPACES)
-do
-print_space
-continue
-done
-   if [ $REMAS -eq 1 ]; then
-   print_space
-   else
-   :
-   fi
+print_sstrb a
 print_hashend
 print_hash
 for i in $(numlist $SPACES)
