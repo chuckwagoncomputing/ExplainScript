@@ -18,6 +18,13 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+if [ $1 = "-h" ] || [ $1 = "--help" ]
+then
+echo -e "Usage: expscpt.sh [OPTIONS]...\n#*************************************#\n#             expscpt.sh              #\n#             07/14/2012              #\n#      Written By David Holdeman      #\n#                                     #\n#  Makes comment boxes like this one  #\n#*************************************#\n\n  -h, --help        Display this help and exit\n  -l [NUMBER]       Limit lines at certain number of chars\n"
+exit
+else
+:
+fi
 numlist()
 {
 BASHV=`echo $BASH_VERSION | head -c 1`
@@ -205,6 +212,17 @@ then
 :
 else
 echo "Error: Date not formatted correctly"
+fi
+if [ "$1" = "-l" ]
+then
+if [ $2 -eq $2 ] || [ $2 != "" ] 2> /dev/null
+then
+MAXLENGTHA=$2
+MAXLENGTH=`echo $(( MAXLENGTHA-$(($((CHAR*2 ))-2))))`
+else
+echo "Error: Value for max is not a number"
+exit
+fi
 fi
 SSTRA=`echo $SNAME | wc -c`
 WSTRA=`echo $WNAME | wc -c`
