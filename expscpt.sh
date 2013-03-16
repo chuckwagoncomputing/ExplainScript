@@ -214,298 +214,169 @@ print_writ()
  echo -n "Written By $WNAME" >> $FILE
 }
 
-print_sname()
+prep_sname()
 {
- if [ $MAXLENGTH ]
- then
-  for w in $SNAME
-  do
-   THISWORD=`echo $w | wc -c`
-   TOTAL=$(( TOTAL + THISWORD ))
-   if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
-   then
-    for i in $(numlist $SPACES)
-    do
-     print_space
-     continue
-    done
-    if [ $1 = "s" ]
-    then
-     :
-    elif [ $1 = "w" ]
-    then
-     ADIFFWS=$(( WSTRB - TOTAL ))
-     BDIFFWS=$(( ADIFFWS / 2 ))
-    elif [ $1 = "a" ]
-    then
-     ADIFFAS=$(( ASTRB - TOTAL ))
-     BDIFFAS=$(( ADIFFAS / 2 ))
-    else
-     echo "Error: invalid print_sname option"
-     exit 1
-    fi
-    print_hashend
-    print_hash
-    for i in $(numlist $SPACES)
-    do
-     print_space
-     continue
-    done
-    TOTAL=$THISWORD
-   else
-   if [ $TOTAL -eq $THISWORD ]
-   then
-    :
-   else
-    LINE="$LINE "
-   fi
-  fi
-  LINE="$LINE$w"
- done
- else
-  if [ $1 = "s" ]
-  then
-  for i in $(numlist $SPACES)
-  do
-   print_space
-   continue
-  done
-  echo -n $SNAME >> $FILE
-  for i in $(numlist $SPACES)
-  do
-   print_space
-   continue
-  done
-  elif [ $1 = "w" ]
+ for w in $SNAME
+ do
+  THISWORD=`echo $w | wc -c`
+  TOTAL=$(( TOTAL + THISWORD ))
+  if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
   then
    for i in $(numlist $SPACES)
    do
-    print_space
+    SNAMEVAR="$SNAMEVAR "
     continue
    done
-   for i in $(numlist $BDIFFWS)
-   do
-    print_space
-    continue
-   done
-   echo -n $SNAME >> $FILE
-   for i in $(numlist $BDIFFWS)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   if [ $REMWS -eq 1 ]
+   if [ $1 = "s" ]
    then
-    print_space
-   else
     :
-   fi
+   elif [ $1 = "w" ]
+   then
+    ADIFFWS=$(( WSTRB - TOTAL ))
+    BDIFFWS=$(( ADIFFWS / 2 ))
    elif [ $1 = "a" ]
    then
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $BDIFFAS)
-   do
-    print_space
-    continue
-   done
-   echo -n $SNAME >> $FILE
-   for i in $(numlist $BDIFFAS)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   if [ $REMAS -eq 1 ]
-   then
-    print_space
+    ADIFFAS=$(( ASTRB - TOTAL ))
+    BDIFFAS=$(( ADIFFAS / 2 ))
    else
-    :
+    echo "Error: invalid prep_sname option"
+    exit 1
    fi
+   SNAMEVAR="$SNAMEVAR#\n"
+   SNAMEVAR="$SNAMEVAR#"
+   for i in $(numlist $SPACES)
+   do
+    SNAMEVAR="$SNAMEVAR "
+    continue
+   done
+   TOTAL=$THISWORD
   else
-   echo "Error: invalid print_sname option"
-   exit 1
+  if [ $TOTAL -eq $THISWORD ]
+  then
+   :
+   else
+   LINE="$LINE "
   fi
  fi
+ LINE="$LINE$w"
+ done
 }
 
-print_wname()
+print_sname()
 {
- if [ $MAXLENGTH ]
+ if [ $1 = "s" ]
  then
-  for w in $WNAME
+  for i in $(numlist $SPACES)
   do
-   THISWORD=`echo $w | wc -c`
-   TOTAL=$(( TOTAL + THISWORD ))
-   if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
-   then
-    for i in $(numlist $SPACES)
-    do
-     print_space
-     continue
-    done
-    if [ $1 = "s" ]
-    then
-     ADIFFSW=$(( SSTRB - TOTAL ))
-     BDIFFSW=$(( ADIFFSW / 2 ))
-    elif [ $1 = "w" ]
-    then
-     :
-    elif [ $1 = "a" ]
-    then
-     ADIFFAW=$(( ASTRB - TOTAL ))
-     BDIFFAW=$(( ADIFFAW / 2 ))
-    else
-     echo "Error: invalid print_wname option"
-     exit 1
-    fi
-    print_hashend
-    print_hash
-    for i in $(numlist $SPACES)
-    do
-     print_space
-     continue
-    done
-    TOTAL=$THISWORD
-    else
-     if [ $TOTAL -eq $THISWORD ]
-     then
-      :
-     else
-      LINE="$LINE "
-     fi
-    fi
-    LINE="$LINE$w"
-   done
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  SNAMEVAR="$SNAMEVAR$SNAME"
+  for i in $(numlist $SPACES)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+ elif [ $1 = "w" ]
+ then
+  for i in $(numlist $SPACES)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  for i in $(numlist $BDIFFWS)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  SNAMEVAR=`echo -n $SNAME`
+  for i in $(numlist $BDIFFWS)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  for i in $(numlist $SPACES)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  if [ $REMWS -eq 1 ]
+  then
+   SNAMEVAR="$SNAMEVAR "
   else
-  if [ $1 = "s" ]
-  then
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $BDIFFSW)
-   do
-    print_space
-    continue
-   done
-   print_writ
-   for i in $(numlist $BDIFFSW)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   if [ $REMSW -eq 1 ]
-   then
-    print_space
-   else
-    :
-   fi
-  elif [ $1 = "w" ]
-  then
-  for i in $(numlist $SPACES)
-  do
-   print_space
-   continue
-  done
-  print_writ
-  for i in $(numlist $SPACES)
-  do
-   print_space
-   continue
-  done
+   :
+  fi
   elif [ $1 = "a" ]
   then
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $BDIFFAW)
-   do
-    print_space
-    continue
-   done
-   print_writ
-   for i in $(numlist $BDIFFAW)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   if [ $REMAW -eq 1 ]
-   then
-    print_space
-   else
-    :
-   fi
+  for i in $(numlist $SPACES)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  for i in $(numlist $BDIFFAS)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  SNAMEVAR=`echo -n $SNAME`
+  for i in $(numlist $BDIFFAS)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  for i in $(numlist $SPACES)
+  do
+   SNAMEVAR="$SNAMEVAR "
+   continue
+  done
+  if [ $REMAS -eq 1 ]
+  then
+   SNAMEVAR="$SNAMEVAR "
   else
-   echo "Error: invalid print_wname option"
-   exit 1
+   :
   fi
+ else
+  echo "Error: invalid prep_sname option"
+  exit 1
  fi
 }
 
-print_about()
+prep_wname()
 {
- if [ $MAXLENGTH ]
- then
-  for w in $ABOUT
-  do
-   THISWORD=`echo $w | wc -c`
-   TOTAL=$(( TOTAL + THISWORD ))
-   if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
+ for w in $WNAME
+ do
+  THISWORD=`echo $w | wc -c`
+  TOTAL=$(( TOTAL + THISWORD ))
+  if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
+  then
+   for i in $(numlist $SPACES)
+   do
+    WNAMEVAR="$WNAMEVAR "
+    continue
+   done
+   if [ $1 = "s" ]
    then
-    for i in $(numlist $SPACES)
-    do
-     print_space
-     continue
-    done
-    if [ $1 = "s" ]
-    then
-     ADIFFSA=$(( SSTRB - TOTAL ))
-     BDIFFSA=$(( ADIFFSA / 2 ))
-    elif [ $1 = "w" ]
-    then
-     ADIFFWA=$(( WSTRB - TOTAL ))
-     BDIFFWA=$(( ADIFFWA / 2 ))
-    elif [ $1 = "a" ]
-    then
-     :
-    else
-     echo "Error: invalid print_about option"
-     exit 1
-    fi
-    print_hashend
-    print_hash
-    for i in $(numlist $SPACES)
-    do
-     print_space
-     continue
-    done
-    TOTAL=$THISWORD
+    ADIFFSW=$(( SSTRB - TOTAL ))
+    BDIFFSW=$(( ADIFFSW / 2 ))
+   elif [ $1 = "w" ]
+   then
+    :
+   elif [ $1 = "a" ]
+   then
+    ADIFFAW=$(( ASTRB - TOTAL ))
+    BDIFFAW=$(( ADIFFAW / 2 ))
+   else
+    echo "Error: invalid print_wname option"
+    exit 1
+   fi
+   WNAMEVAR="$WNAMEVAR#\n"
+   WNAMEVAR="$WNAMEVAR#"
+   for i in $(numlist $SPACES)
+   do
+    WNAMEVAR="$WNAMEVAR "
+    continue
+   done
+   TOTAL=$THISWORD
    else
     if [ $TOTAL -eq $THISWORD ]
     then
@@ -516,82 +387,211 @@ print_about()
    fi
    LINE="$LINE$w"
   done
- else
-  if [ $1 = "s" ]
+}
+
+print_wname()
+{
+ if [ $1 = "s" ]
+ then
+  for i in $(numlist $SPACES)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  for i in $(numlist $BDIFFSW)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  WNAMEVAR="${WNAMEVAR}Written By: $WRIT"
+  for i in $(numlist $BDIFFSW)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  for i in $(numlist $SPACES)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  if [ $REMSW -eq 1 ]
   then
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $BDIFFSA)
-   do
-    print_space
-    continue
-   done
-   echo -n $ABOUT >> $FILE
-   for i in $(numlist $BDIFFSA)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   if [ $REMSA -eq 1 ]
-   then
-    print_space
-   else
-    :
-   fi
-  elif [ $1 = "w" ]
-  then
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $BDIFFWA)
-   do
-    print_space
-    continue
-   done
-   echo -n $ABOUT >> $FILE
-   for i in $(numlist $BDIFFWA)
-   do
-    print_space
-    continue
-   done
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   if [ $REMWA -eq 1 ]
-   then
-    print_space
-   else
-    :
-   fi
-  elif [ $1 = "a" ]
-  then
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
-   echo -n $ABOUT >> $FILE
-   for i in $(numlist $SPACES)
-   do
-    print_space
-    continue
-   done
+   WNAMEVAR="$WNAMEVAR "
   else
-   echo "Error: invalid print_about option"
-   exit 1
+   :
   fi
+ elif [ $1 = "w" ]
+ then
+ for i in $(numlist $SPACES)
+ do
+   WNAMEVAR="$WNAMEVAR "
+  continue
+ done
+ print_writ
+ for i in $(numlist $SPACES)
+ do
+  WNAMEVAR="$WNAMEVAR "
+  continue
+ done
+ elif [ $1 = "a" ]
+ then
+  for i in $(numlist $SPACES)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  for i in $(numlist $BDIFFAW)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  print_writ
+  for i in $(numlist $BDIFFAW)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  for i in $(numlist $SPACES)
+  do
+   WNAMEVAR="$WNAMEVAR "
+   continue
+  done
+  if [ $REMAW -eq 1 ]
+  then
+   WNAMEVAR="$WNAMEVAR "
+  else
+   :
+  fi
+ else
+  echo "Error: invalid prep_wname option"
+  exit 1
+ fi
+}
+
+prep_about()
+{
+ for w in $ABOUT
+ do
+  THISWORD=`echo $w | wc -c`
+  TOTAL=$(( TOTAL + THISWORD ))
+  if [ $(( TOTAL - 1 )) -ge $MAXLENGTH ]
+  then
+   for i in $(numlist $SPACES)
+   do
+    ABOUTVAR="$ABOUTVAR "
+    continue
+   done
+   if [ $1 = "s" ]
+   then
+    ADIFFSA=$(( SSTRB - TOTAL ))
+    BDIFFSA=$(( ADIFFSA / 2 ))
+   elif [ $1 = "w" ]
+   then
+    ADIFFWA=$(( WSTRB - TOTAL ))
+    BDIFFWA=$(( ADIFFWA / 2 ))
+   elif [ $1 = "a" ]
+   then
+    :
+   else
+    echo "Error: invalid prep_about option"
+    exit 1
+   fi
+   ABOUTVAR="$ABOUTVAR#\n"
+   ABOUTVAR="$ABOUTVAR#"
+   for i in $(numlist $SPACES)
+   do
+    ABOUTVAR="$ABOUTVAR "
+    continue
+   done
+   TOTAL=$THISWORD
+  else
+   if [ $TOTAL -eq $THISWORD ]
+   then
+    :
+   else
+    LINE="$LINE "
+   fi
+  fi
+  LINE="$LINE$w"
+ done
+}
+
+print_about()
+{
+ if [ $1 = "s" ]
+ then
+  for i in $(numlist $SPACES)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  for i in $(numlist $BDIFFSA)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  echo -n $ABOUT >> $FILE
+  for i in $(numlist $BDIFFSA)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  for i in $(numlist $SPACES)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  if [ $REMSA -eq 1 ]
+  then
+   ABOUTVAR="$ABOUTVAR "
+  else
+   :
+  fi
+ elif [ $1 = "w" ]
+ then
+  for i in $(numlist $SPACES)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  for i in $(numlist $BDIFFWA)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  echo -n $ABOUT >> $FILE
+  for i in $(numlist $BDIFFWA)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  for i in $(numlist $SPACES)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  if [ $REMWA -eq 1 ]
+  then
+   ABOUTVAR="$ABOUTVAR "
+  else
+   :
+  fi
+ elif [ $1 = "a" ]
+ then
+  for i in $(numlist $SPACES)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+  ABOUTVAR="$ABOUTVAR$ABOUT"
+  for i in $(numlist $SPACES)
+  do
+   ABOUTVAR="$ABOUTVAR "
+   continue
+  done
+ else
+  echo "Error: invalid prep_about option"
+  exit 1
  fi
 }
 
@@ -602,6 +602,12 @@ then
 # If Scriptname is the longest
 elif [ $SSTRB -ge $WSTRB -a $SSTRB -ge $ASTRB ]
 then
+ if [ $MAXLENGTH ]
+ then
+  prep_sname
+ else
+  :
+ fi
  print_hash
  for i in $(numlist $SPACES)
  do
@@ -620,7 +626,7 @@ then
  done
  print_hashend
  print_hash
- print_sname s
+ echo "SNAMEVAR"
  print_hashend
  print_hash
  for i in $(numlist $SPACES)
@@ -694,6 +700,12 @@ then
 # If writer name plus "written by" is the longest
 elif [ $WSTRB -gt $SSTRB -a $WSTRB -gt $ASTRB ]
 then
+ if [ $MAXLENGTH ]
+ then
+  prep_wname
+ else
+  :
+ fi
  print_hash
  for i in $(numlist $SPACES)
  do
@@ -744,7 +756,7 @@ then
  fi
  print_hashend
  print_hash
- print_wname w
+ echo "$WNAMEVAR"
  print_hashend
  print_hash
  for i in $(numlist $SPACES)
@@ -786,6 +798,12 @@ then
 # If About is the longest
 elif [ $ASTRB -gt $SSTRB ]
 then
+ if [ $MAXLENGTH ]
+ then
+  prep_about 
+ else
+  :
+ fi
  print_hash
  for i in $(numlist $SPACES)
  do
@@ -856,7 +874,7 @@ then
  done
  print_hashend
  print_hash
- print_about a
+ echo $ABOUTVAR
  print_hashend
  print_hash
  for i in $(numlist $SPACES)
