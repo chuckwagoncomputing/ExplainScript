@@ -1,0 +1,14 @@
+#!/bin/bash
+LONGEST
+A="heoi"
+B="aoetihl"
+C="ao"
+D="aoitatlomilh"
+for i in A B C D
+do
+if [ $((`eval echo "$""$i" | wc -c`-1)) -gt $LONGEST ]; then
+LONGEST=
+fi
+done
+echo $LONGEST
+exit
