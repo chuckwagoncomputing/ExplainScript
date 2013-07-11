@@ -46,5 +46,6 @@ done
 }
 
 # find how much spacing is req'd
+
 PADDING=$((SPACES-$((${#VAR}*2))))
 LINES="$LINES\n"
