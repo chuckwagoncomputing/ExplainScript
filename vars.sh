@@ -8,6 +8,7 @@ diags_zenity()
  ABOUT=`zenity --entry --text="Explain the purpose of the script in a few words"`
  FILE=`zenity --file-selection`
 }
+
 diags_dialog()
 {
  CHAR=`dialog --stdout --inputbox "Enter character(s) to use for the box borders" 10 50` || exit 1
@@ -18,6 +19,7 @@ diags_dialog()
  ABOUT=`dialog --stdout --inputbox "Explain the purpose of the script in a few words" 10 50` || exit 1
  FILE=`dialog --stdout --fselect / 10 50` || exit 1
 }
+
 diags_whiptail()
 {
  CHAR=`whiptail --inputbox "Enter character(s) to use for the box borders" 10 50 3>&1 1>&2 2>&3` || exit 1
@@ -28,19 +30,20 @@ diags_whiptail()
  ABOUT=`whiptail --inputbox "Explain the purpose of the script in a few words" 10 50 3>&1 1>&2 2>&3` || exit 1
  FILE=`whiptail --inputbox "Enter the pathname for the file in which to store the box." 10 50 3>&1 1>&2 2>&3` || exit 1
 }
+
 diags_read()
 {
- read -p "Enter the character(s) to use for the box borders" CHAR
- read -p "Enter the number of spaces before and after words" SPACES
- read -p "Enter the name of the script" SNAME
- read -p "Enter the day the script was written. Format: mm/dd/yyyy" CAL
- read -p "Enter the name of the writer" WNAME
- read -p "Explain the purpose of the script in a few words" ABOUT
- read -p "Enter the pathname for the file in which to store the box" FILE
+ read -p "Enter the character(s) to use for the box borders  " CHAR
+ read -p "Enter the number of spaces before and after words  " SPACES
+ read -p "Enter the name of the script  " SNAME
+ read -p "Enter the day the script was written. Format: mm/dd/yyyy  " CAL
+ read -p "Enter the name of the writer " WNAME
+ read -p "Explain the purpose of the script in a few words  " ABOUT
+ read -p "Enter the pathname for the file in which to store the box  " FILE
 }
 
 # If script is run from a X environment
-# Try Zenity first
+# Try zenity first
 # But if not, try zenity next to last
 # Always try read last
 if [ $XAUTHORITY ]; then

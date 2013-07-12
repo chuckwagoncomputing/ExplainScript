@@ -13,29 +13,9 @@ errnocomp()
 {
   echo "Sorry, this program is not compatible with your computer. Please report an issue at github.com/chuckwagoncomputing/ExplainScript"
   exit 1
-
 }
 
-# numlist function for compatibility between Unices
-# usage: numlist <number>
-numlist()
-{
- if which seq >> /dev/null; then
-  seq $1
- # seq is not available on some BSDs (e.g. Mac), but jot is.
- elif which jot >> /dev/null; then
-  jot $1
- # Bash from version 3 on has built in sequencing.
- elif [ `echo $BASH_VERSION | head -c 1` -ge 3 ]; then
-  eval echo {1..$1}
- else
-  errnocompat
- fi
-}
-
-. getvars.sh
-
+. vars.sh
 . buildline.sh
-
-echo -e $LINES >> $FILE
+echo -e "$LINES" >> $FILE
 exit

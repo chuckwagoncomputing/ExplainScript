@@ -1,27 +1,24 @@
-# CHAR     Border Char(s)
-# SPACES   Number of Spaces for Padding
-# SNAME    Script Name
-# CAL      Date
-# WNAME    Author
-# ABOUT    About Info
-# FILE     File in which to save Box
-
+VARIABLES="SNAME CAL WNAME ABOUT"
 WNAME="Written By $WNAME"
 
 splitter()
 {
+ # Usage: splitter <string to be split>
+ # LIMIT is number of chars
+ # Splits at words, not strict
+ # Sets VAR<n>; e.g. VAR1, VAR2, ...
  for ((i=1;; i++)); do
   read VAR$i || break;
  done <<lineToSplit
-`if [ $LIMIT ]; then echo "$@" | fold -sw $LIMIT; else; echo $@; fi`
+`if [ $LIMIT ]; then echo "$@" | fold -sw $LIMIT; else echo $@; fi`
 lineToSplit
 }
 
 center()
 {
- PADDING=$((PADDING-2))
+ # VAR and PADDING must be set
  LINES="$LINES$CHAR"`echo -e $VAR | sed -e :a -e "s/^.\{1,$PADDING\}$/ & /;ta"`
- LEN=${#VAR}`
+ LEN=${#VAR}
  if [ $((LEN%2)) -eq 0 -a $((PADDING%2)) -eq 0 ]; then
   LINES="$LINES$CHAR"
  elif [ $((LEN%2)) -eq 0 -a $((PADDING%2)) -ne 0 ]; then
@@ -35,17 +32,33 @@ center()
 
 findlongest()
 {
-LONGEST=0
-for i in $@
-do
-if [ $((`eval echo "$""$i" | wc -c`-1)) -gt $LONGEST ]; then
-LONGEST=$((`eval echo "$""$i" | wc -c`-1))
-LONGESTVAR=$i
-fi
-done
+ # Usage: findlongest VAR1 VAR2 ...
+ LONGEST=0
+ for i in $@; do
+  if [ $((`eval echo "$""$i" | wc -c`-1)) -gt $LONGEST ]; then
+   LONGEST=$((`eval echo "$""$i" | wc -c`-1))
+   LONGESTVAR="$i"
+  fi
+ done
 }
 
-# find how much spacing is req'd
+border()
+{
+ LINES="$LINES$CHAR"
+ for ((i=0; i<=$(($PADDING+1)); i++)); do
+  LINES="$LINES"`echo $CHAR | head -c 1`
+ done
+ LINES="$LINES$CHAR"
+ LINES="$LINES\n"
+}
 
-PADDING=$((SPACES-$((${#VAR}*2))))
-LINES="$LINES\n"
+findlongest $VARIABLES
+PADDING=$(($((LONGEST+$((SPACES*2))))-2))
+border
+for i in $VARIABLES; do
+ splitter $(eval echo "$""$i")
+ VAR=$VAR1
+ center
+ LINES="$LINES\n"
+done
+border
