@@ -9,6 +9,7 @@ splitter()
  # Sets VAR<n>; e.g. VAR1, VAR2, ...
  for ((i=1;; i++)); do
   read VAR$i || break;
+  VARS=$((VARS+1))
  done <<lineToSplit
 `if [ $LIMIT ]; then echo "$@" | fold -sw $LIMIT; else echo $@; fi`
 lineToSplit
@@ -45,7 +46,7 @@ findlongest()
 border()
 {
  LINES="$LINES$CHAR"
- for ((i=0; i<=$(($PADDING+1)); i++)); do
+ for ((i=0; i<=$((PADDING+1)); i++)); do
   LINES="$LINES"`echo $CHAR | head -c 1`
  done
  LINES="$LINES$CHAR"
@@ -57,8 +58,11 @@ PADDING=$(($((LONGEST+$((SPACES*2))))-2))
 border
 for i in $VARIABLES; do
  splitter $(eval echo "$""$i")
- VAR=$VAR1
- center
- LINES="$LINES\n"
+ for ((i=1; i <=$VARS; i++)); do
+  VAR=`eval echo "$""VAR""$i"`
+  center
+  LINES="$LINES\n"
+ done
+ VARS=0
 done
 border
