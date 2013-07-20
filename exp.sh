@@ -11,11 +11,11 @@ fi
 # non-compatible error function
 errnocomp()
 {
-  echo "Sorry, this program is not compatible with your computer. Please report an issue at github.com/chuckwagoncomputing/ExplainScript"
+  echo "Sorry, this program is not compatible with your computer. Please report an issue at github.com/chuckwagoncomputing/ExplainScript" >&2
   exit 1
 }
 
 . vars.sh
 . buildline.sh
-echo -e "$LINES" >> $FILE
+echo -e "$LINES" >> "$FILE"
 exit
