@@ -11,14 +11,14 @@ if [ "$1" == "-h" -o "$1" == "--help" ]; then
   -l, --limit [NUMBER]       Limit lines at certain number of chars\n"
  exit
 elif [ "$1" == "-l" -o "$1" == "--limit" ]; then
-LIMIT=$2
+ LIMIT=$2
 fi
 
 # non-compatible error function
 errnocomp()
 {
-  echo "Sorry, this program is not compatible with your computer. Please report an issue at github.com/chuckwagoncomputing/ExplainScript" >&2
-  exit 1
+ echo "Sorry, this program is not compatible with your computer. Please report an issue at github.com/chuckwagoncomputing/ExplainScript" >&2
+ exit 1
 }
 
 diags_zenity()
