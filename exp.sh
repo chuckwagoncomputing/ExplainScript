@@ -14,13 +14,6 @@ elif [ "$1" == "-l" -o "$1" == "--limit" ]; then
  LIMIT=$2
 fi
 
-# non-compatible error function
-errnocomp()
-{
- echo "Sorry, this program is not compatible with your computer. Please report an issue at github.com/chuckwagoncomputing/ExplainScript" >&2
- exit 1
-}
-
 diags_zenity()
 {
  CHAR=`zenity --entry --text="Enter the character(s) to use for the box borders"`
