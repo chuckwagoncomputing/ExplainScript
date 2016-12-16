@@ -63,21 +63,21 @@ diags_read()
 # But if not, try zenity next to last
 # Always try read last
 if [ $XAUTHORITY ]; then
- if which zenity >> /dev/null; then
+ if which zenity 2> /dev/null > /dev/null; then
   diags_zenity
- elif which dialog >> /dev/null; then
+ elif which dialog 2> /dev/null > /dev/null; then
   diags_dialog
- elif which whiptail >> /dev/null; then
+ elif which whiptail 2> /dev/null > /dev/null; then
   diags_whiptail
  else
   diags_read
  fi
 else
- if which dialog >> /dev/null; then
+ if which dialog 2> /dev/null > /dev/null; then
   diags_dialog
- elif which whiptail >> /dev/null; then
+ elif which whiptail 2> /dev/null > /dev/null; then
   diags_whiptail
- elif which zenity >> /dev/null; then
+ elif which zenity 2> /dev/null > /dev/null; then
   diags_zenity
  else
   diags_read
@@ -93,7 +93,7 @@ splitter()
  # Splits at words, not strict
  # Sets VAR<n>; e.g. VAR1, VAR2, ...
  for ((i=1;; i++)); do
-  read VAR$i || break;
+  read $v$i || break;
   VARS=$((VARS+1))
  done <<lineToSplit
 `if [ $LIMIT ]; then echo "$@" | fold -sw $LIMIT; else echo $@; fi`
@@ -138,17 +138,21 @@ border()
  LINES="$LINES\n"
 }
 
-findlongest $VARIABLES
-PADDING=$(($((LONGEST+$((SPACES*2))))-2))
-border
-for i in $VARIABLES; do
- splitter $(eval echo "$""$i")
+for v in $VARIABLES; do
+ splitter $(eval echo "$""$v")
  for ((i=1; i <=$VARS; i++)); do
-  VAR=`eval echo "$""VAR""$i"`
-  center
-  LINES="$LINES\n"
+  EXPANDEDVARS="$EXPANDEDVARS $v$i"
  done
  VARS=0
+done
+findlongest $EXPANDEDVARS
+PADDING=$(($((LONGEST+$((SPACES*2))))-2))
+border
+VCOUNT=0
+for v in $EXPANDEDVARS; do
+ VAR=`eval echo "$""$v"`
+ center
+ LINES="$LINES\n"
 done
 border
 echo -e "$LINES" >> "$FILE"
